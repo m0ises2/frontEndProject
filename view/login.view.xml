@@ -1,0 +1,51 @@
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="List.controller.login">
+	<App>
+		<pages>
+			<Page title="Welcome">
+				<content>
+					<sap.ui.layout:Grid xmlns:sap.ui.layout="sap.ui.layout" id="grid" defaultIndent="XL4 L4 M3 S0" defaultSpan="XL4 L4 M6 S12" busyIndicatorDelay="0">
+				 <sap.ui.layout:content>
+						 <sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true" id="__form0">
+								 <sap.ui.layout.form:formContainers>
+										 <sap.ui.layout.form:FormContainer id="formContainer">
+												 <sap.ui.layout.form:formElements>
+
+													 <sap.ui.layout.form:FormElement label="clienId" id="CLIENID">
+															 <sap.ui.layout.form:fields>
+																	 <Input width="100%" id="clientId" textAlign="Begin"/>
+															 </sap.ui.layout.form:fields>
+														 </sap.ui.layout.form:FormElement>
+
+														 <sap.ui.layout.form:FormElement label="Email" id="EMAIL">
+															 <sap.ui.layout.form:fields>
+																	<Input width="100%" id="email" textAlign="Begin"/>
+															 </sap.ui.layout.form:fields>
+														 </sap.ui.layout.form:FormElement>
+
+														 <sap.ui.layout.form:FormElement label="Password" id="PASSWORD">
+																 <sap.ui.layout.form:fields>
+																		 <Input width="100%" id="password" textAlign="Begin" type="Password"/>
+																 </sap.ui.layout.form:fields>
+														 </sap.ui.layout.form:FormElement>
+
+														 <sap.ui.layout.form:FormElement id="er4">
+														 <sap.ui.layout.form:fields>
+																 <Button text="Login" width="auto" id="loginButton" type="Emphasized" press="onLogin"/>
+														 </sap.ui.layout.form:fields>
+														 </sap.ui.layout.form:FormElement>
+
+												 </sap.ui.layout.form:formElements>
+										 </sap.ui.layout.form:FormContainer>
+								 </sap.ui.layout.form:formContainers>
+
+								 <sap.ui.layout.form:layout>
+										 <sap.ui.layout.form:ResponsiveGridLayout id="__layout0"/>
+								 </sap.ui.layout.form:layout>
+							 </sap.ui.layout.form:Form>
+					 </sap.ui.layout:content>
+				 </sap.ui.layout:Grid>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

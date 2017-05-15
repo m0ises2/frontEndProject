@@ -1,0 +1,14 @@
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="List.controller.home">
+	<App>
+		<pages>
+			<Page title="Home">
+				<content>
+					
+				</content>
+				<headerContent>
+			    <Button text="Logout" width="auto" id="logout" type="Back"/>
+				</headerContent>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>
