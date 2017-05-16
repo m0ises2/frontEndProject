@@ -4,11 +4,27 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/m/Dialog",
     "sap/m/Button",
-    "sap/m/MessageToast"
-], function(BaseController, Fragment, JSONModel, Dialog, Button, MessageToast) {
+    "sap/m/MessageToast",
+    'sap/ui/model/Filter'
+], function(BaseController, Fragment, JSONModel, Dialog, Button, MessageToast, Filter) {
     "use strict";
 
     return BaseController.extend("List.controller.home", {
+        onSearch: function(oEvent) {
+          var searchString = oEvent.getSource().getValue();
+          // add filter for search
+    			var aFilters = [];
+
+    			if (searchString && searchString.length > 0) {
+            var filter = new Filter("name", sap.ui.model.FilterOperator.Contains, searchString);    				
+    				aFilters.push(filter);
+    			}
+
+    			// update list binding
+    			var oTable = this.getView().byId("donorsTable");
+    			var binding = oTable.getBinding("items");
+    			binding.filter(aFilters, "Application");
+        },
         onItemPress: function(oEvent) {
           alert("presionado");
           console.log(oEvent.getParameter("listItem").getBindingContext("data").getObject());

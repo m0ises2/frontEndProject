@@ -7,6 +7,7 @@
 						<items>
 								<IconTabFilter text="Donors" icon="sap-icon://add-contact" iconColor="Neutral" id="__filter1">
 										<content>
+												<SearchField width="25%" placeholder="Name" id="searchInput" liveChange= "onSearch"/>
 												<Table noDataText="No Data" id="donorsTable" select="onItemPress" mode="SingleSelectMaster">
 														<items>
 																<ColumnListItem id="__item3">
