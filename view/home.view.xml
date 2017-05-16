@@ -1,12 +1,75 @@
 <mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="List.controller.home">
 	<App>
 		<pages>
-			<Page title="Home">
+			<Page title="Welcome">
 				<content>
-					
+					<IconTabBar selectedKey="__filter1" id="__bar0">
+						<items>
+								<IconTabFilter text="Donors" icon="sap-icon://add-contact" iconColor="Neutral" id="__filter1">
+										<content>
+												<Table noDataText="No Data" id="donorsTable" select="onItemPress" mode="SingleSelectMaster">
+														<items>
+																<ColumnListItem id="__item3">
+																</ColumnListItem>
+																<ColumnListItem id="__item4">
+																</ColumnListItem>
+														</items>
+														<columns>
+																<Column>
+																		<header>
+																				<Label text="Name" />
+																		</header>
+																</Column>
+
+																<Column>
+																		<header>
+																				<Label text="Lastname" />
+																		</header>
+
+																</Column>
+																<Column>
+																		<header>
+																				<Label text="Email" />
+																		</header>
+																</Column>
+
+																<Column>
+																		<header>
+																				<Label text="Birthdate" />
+																		</header>
+																</Column>
+
+																<Column>
+																		<header>
+																				<Label text="Phone" />
+																		</header>
+																</Column>
+
+																<Column>
+																		<header>
+																				<Label text="Gender" />
+																		</header>
+																</Column>
+															</columns>
+														</Table>
+
+												<Button text="Excel Ordered" width="auto" id="__button0" type="Transparent" press="onTest"/>
+												<Button text="Excel Ordered" width="auto" type="Transparent" press="onTest"/>
+												<Button text="Excel Ordered" width="auto" type="Transparent" press="onTest"/>
+												<Button text="Excel Ordered" width="auto" type="Transparent" press="onTest"/>
+												<Button text="Excel Ordered" width="auto" type="Transparent" press="onTest"/>
+
+										</content>
+
+								</IconTabFilter>
+
+								<IconTabFilter text="Suscriptions" icon="sap-icon://simple-payment" iconColor="Neutral" id="__filter2"/></items>
+
+				</IconTabBar>
+
 				</content>
 				<headerContent>
-			    <Button text="Logout" width="auto" id="logout" type="Back"/>
+			    <Button text="Logout" width="auto" id="logout" type="Back" press="onLogout"/>
 				</headerContent>
 			</Page>
 		</pages>

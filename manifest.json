@@ -63,9 +63,9 @@
 					"bundleName": "List.i18n.i18n"
 				}
 			},
-			"emp": {
+			"data": {
 				"type": "sap.ui.model.json.JSONModel",
-				"uri": "localService/emp.json"
+				"uri": "localService/data.json"
 			}
 		},
     "routing": {

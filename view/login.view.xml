@@ -10,7 +10,7 @@
 										 <sap.ui.layout.form:FormContainer id="formContainer">
 												 <sap.ui.layout.form:formElements>
 
-													 <sap.ui.layout.form:FormElement label="clienId" id="CLIENID">
+													 <sap.ui.layout.form:FormElement label="Client ID" id="CLIENID">
 															 <sap.ui.layout.form:fields>
 																	 <Input width="100%" id="clientId" textAlign="Begin"/>
 															 </sap.ui.layout.form:fields>

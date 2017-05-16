@@ -9,16 +9,19 @@ sap.ui.define([
     "use strict";
 
     return BaseController.extend("List.controller.login", {
-
         onInit: function() {
-
+          this.getView().byId("clientId").setValue("");
+          this.getView().byId("email").setValue("");
+          this.getView().byId("password").setValue("");
         },
         onLogin: function(oEvent) {
+          //
           //var clientId = this.getView().byId("CLIENID").getFields()[0].getValue();
           var clientId = this.getView().byId("clientId").getValue();
           var email = this.getView().byId("email").getValue();
           var password = this.getView().byId("password").getValue();
           var loginData = {};
+          var that = this;
 
           // Validación:
           if ( clientId === "" || email === "" || password === "" ) {
@@ -27,14 +30,38 @@ sap.ui.define([
                width: "45%"
             });
           } else {
-            console.log('Llamada AJAX al backend para logear al usuario.');
-            loginData.clienId = clientId;
+
+            loginData.client = clientId;
             loginData.email = email;
             loginData.password = password;
             console.log('Lo mando al backend: ', loginData);
-            this.getRouter().navTo("home", {}, false);
-          }
 
+            $.ajax({
+    		       url: "http://localhost:3000/user/login",
+    		       method: "POST",
+               crossDomain: true,
+               contentType: "application/json",
+               dataType: "json",
+               data: JSON.stringify(loginData),
+    		       success: function(response) {
+                console.log(response);
+                if(response.acceptedLogin === true) {
+                  that.getView().getModel("data").setProperty('/Logged/', true);
+                  console.log(that.getView().getModel("data"));
+                  that.getRouter().navTo("home", {}, false);
+                } else {
+                  MessageToast.show("We don't recognize this Client ID, Email or password", {
+                     duration: 4500,
+                     width: "45%"
+                  });
+                }
+    				   },
+    		       error: function(error) {
+                  console.log('Error');
+                  console.log(error);
+    		       }
+						});
+          }
         }
     });
 
