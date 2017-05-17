@@ -3,14 +3,14 @@
 		<pages>
 			<Page title="Welcome">
 				<content>
-					<IconTabBar selectedKey="__filter1" id="__bar0">
+					<IconTabBar selectedKey="__filter1" id="__bar0" expandable="false">
 						<items>
 								<IconTabFilter text="Donors" icon="sap-icon://add-contact" iconColor="Neutral" id="__filter1">
 										<content>
-
 												<Bar id="__bar1" design="Header">
 													<contentLeft>
 															<SearchField width="auto" placeholder="Name" id="searchInput" liveChange= "onSearch"/>
+															<Button text="Download Excel" width="auto" id="downExcel" type="Transparent" press="onTest"/>
 													</contentLeft>
 												<contentRight>
 														<Button text="Add Donor" width="auto" id="newDonor" type="Accept" press="onNewDonor"/>
@@ -18,12 +18,6 @@
 											</Bar>
 
 												<Table noDataText="No Data" id="donorsTable" select="onItemPress" mode="SingleSelectMaster">
-														<items>
-																<ColumnListItem id="__item3">
-																</ColumnListItem>
-																<ColumnListItem id="__item4">
-																</ColumnListItem>
-														</items>
 														<columns>
 																<Column>
 																		<header>
@@ -62,13 +56,70 @@
 																</Column>
 															</columns>
 														</Table>
-
-														<Button text="Download Excel" width="auto" id="downExcel" type="Transparent" press="onTest"/>
-
 											</content>
 								</IconTabFilter>
 
-								<IconTabFilter text="Suscriptions" icon="sap-icon://simple-payment" iconColor="Neutral" id="__filter2"/></items>
+								<IconTabFilter text="Suscriptions" icon="sap-icon://simple-payment" iconColor="Neutral" id="__filter2">
+								<content>
+										<Bar design="Header">
+											<contentLeft>
+												<Button text="Download Excel" width="auto" id="downExcel2" type="Transparent" press="onTest2"/>
+											</contentLeft>
+											<contentRight>
+													<Button text="Add Suscription" width="auto" id="newSuscription" type="Accept" press="onNewSuscription"/>
+											</contentRight>
+										</Bar>
+
+										<Table noDataText="No Data" id="suscriptionTable" select="onItemPress2" mode="SingleSelectMaster">
+												<columns>
+														<Column>
+																<header>
+																		<Label text="Name" />
+																</header>
+														</Column>
+
+														<Column>
+																<header>
+																		<Label text="Lastname" />
+																</header>
+
+														</Column>
+														<Column>
+																<header>
+																		<Label text="Amount" />
+																</header>
+														</Column>
+
+														<Column>
+																<header>
+																		<Label text="Card Type" />
+																</header>
+														</Column>
+
+														<Column>
+																<header>
+																		<Label text="Card Brand" />
+																</header>
+														</Column>
+
+														<Column>
+																<header>
+																		<Label text="Last Digits" />
+																</header>
+														</Column>
+
+														<Column>
+																<header>
+																		<Label text="First charge" />
+																</header>
+														</Column>
+
+													</columns>
+												</Table>
+
+									</content>
+								</IconTabFilter>
+							</items>
 
 				</IconTabBar>
 

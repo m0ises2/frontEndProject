@@ -1,0 +1,47 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout">
+	<Dialog id="dialogoReporte" type="Standard" title="Suscription">
+		<content>
+			<sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true" layout="ResponsiveGridLayout" labelSpanL="5" labelSpanM="3" adjustLabelSpan="false">
+			        <sap.ui.layout.form:content>
+			        	<l:VerticalLayout class="sapUiContentPadding" width="100%">
+			        	<l:content>
+			          	<Label text="Name" design="Bold" />
+			            <Input id="name3" width="100%" type="Text"/>
+			            <Label text="Lastname" design="Bold" />
+			            <Input id="lastname3" width="100%" type="Text" />
+                  <Label text="Amount" design="Bold" />
+			            <Input id="amount" width="100%" type="Number" />
+                  <Label text="Firs charge" design="Bold" />
+                  <DatePicker id="initDate" width="auto" />
+                  <Label text="Last Digits" design="Bold" />
+			            <Input id="lastDigits" width="100%" type="Number" />
+                  <Label text="Card Brand" design="Bold" />
+                  <Select id="brandCard" >
+		                 <items>
+	                        <core:ListItem text="MasterCard" key="mastercard" />
+													<core:ListItem text="Visa" key="visa" />
+	                        <core:ListItem text="Amex" key="amex" />
+	                     </items>
+	                </Select>
+									<Label text="Card Type" design="Bold" />
+                  <Select id="typeCard" >
+		                 <items>
+	                        <core:ListItem text="Credit" key="crédito" />
+	                        <core:ListItem text="Debit" key="débito" />
+	                     </items>
+	                </Select>
+			        	</l:content>
+			            </l:VerticalLayout>
+			        </sap.ui.layout.form:content>
+			    </sap.ui.layout.form:SimpleForm>
+		</content>
+		<beginButton>
+			<Button id="saveBtnSusc" type="Accept" width="auto" text="Save Changes" />
+		</beginButton>
+		<endButton>
+      <Button id="deleteBtnSusc" type="Reject" width="auto" text="Delete"/>
+
+		</endButton>
+
+	</Dialog>
+</core:FragmentDefinition>

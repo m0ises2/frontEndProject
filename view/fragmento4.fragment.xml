@@ -1,0 +1,49 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout">
+	<Dialog id="dialogoReporte" type="Standard" title="New Donor">
+		<content>
+			<sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true" layout="ResponsiveGridLayout" id="__form0" labelSpanL="5" labelSpanM="3" adjustLabelSpan="false">
+			        <sap.ui.layout.form:content>
+			        	<l:VerticalLayout class="sapUiContentPadding" width="100%">
+									<l:content>
+				            <Label text="Donor" design="Bold" />
+										<Select id="donorSelect" items="{data>/donors/}">
+			                 <items>
+		                        <core:ListItem text="{data>name/} {data>lastname/}" key="{data>donorId/}" />
+		                     </items>
+		                </Select>
+	                  <Label text="Amount" design="Bold" />
+				            <Input id="amount2" width="100%" type="Number" />
+	                  <Label text="Firs charge" design="Bold" />
+	                  <DatePicker id="initDate2" width="auto" />
+	                  <Label text="Last Digits" design="Bold" />
+				            <Input id="lastDigits2" width="100%" type="Number" />
+	                  <Label text="Card Brand" design="Bold" />
+	                  <Select id="brandCard2" >
+			                 <items>
+		                        <core:ListItem text="MasterCard" key="mastercard" />
+														<core:ListItem text="Visa" key="visa" />
+		                        <core:ListItem text="Amex" key="amex" />
+		                     </items>
+		                </Select>
+										<Label text="Card Type" design="Bold" />
+	                  <Select id="typeCard2" >
+			                 <items>
+		                        <core:ListItem text="Credit" key="crédito" />
+		                        <core:ListItem text="Debit" key="débito" />
+		                     </items>
+		                </Select>
+				        	</l:content>
+			            </l:VerticalLayout>
+			        </sap.ui.layout.form:content>
+			    </sap.ui.layout.form:SimpleForm>
+		</content>
+		<beginButton>
+			<Button id="createBtn2" type="Accept" width="auto" text="Create" />
+		</beginButton>
+		<endButton>
+      <Button id="cancelBtn2" type="Reject" width="auto" text="Cancel"/>
+
+		</endButton>
+
+	</Dialog>
+</core:FragmentDefinition>

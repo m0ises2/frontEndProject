@@ -10,7 +10,162 @@ sap.ui.define([
     "use strict";
 
     return BaseController.extend("List.controller.home", {
-        onNewDonor(oEvent) {
+        onNewSuscription: function() {
+          var dialog = sap.ui.xmlfragment("List.view.fragmento4", this);
+          var that = this;
+
+          /*Agregamos los events listeners a los botones: */
+          //Botón add:
+          sap.ui.getCore().byId("createBtn2").attachPress(function() {
+            /*var donorToCreate = {
+              name: sap.ui.getCore().byId("name2").getValue(),
+              lastname: sap.ui.getCore().byId("lastname2").getValue(),
+              email: sap.ui.getCore().byId("email2").getValue(),
+              birthdate: sap.ui.getCore().byId("birthdate2").getDateValue(),
+              phone: sap.ui.getCore().byId("phone2").getValue(),
+              gender: sap.ui.getCore().byId("gender2").getSelectedKey()
+            }
+
+            if(donorToCreate.name === "" || donorToCreate.lastname === "" || donorToCreate.email === "" || donorToCreate.birthdate === "" || donorToCreate.phone === "" || donorToCreate.gender === "") {
+              MessageToast.show("Fill in the fields", {
+                 duration: 4500,
+                 width: "35%"
+              });
+            } else {*/
+              //that._saveDonor(donorToCreate);
+              dialog.close();
+              dialog.destroy();
+            //}
+          });
+
+          //Botón cancelar:
+          sap.ui.getCore().byId("cancelBtn2").attachPress(function() {
+            dialog.close();
+            dialog.destroy();
+          });
+
+          //Al cerrar el dialogo con la tecla ESC, es necesario indicarle que se destruya:
+          dialog.attachAfterClose(function() {
+            dialog.destroy();
+          });
+
+          //Agregamos como dependiente el dialogo a la vista:
+          this.getView().addDependent(dialog);
+
+          //Abrimos el dialogo:
+          dialog.open();
+        },
+        _saveChanges2: function( suscription, suscriptionId ) {
+          console.log(suscriptionId);
+          var that = this;
+          $.ajax({
+            async: true,
+             url: "http://localhost:3000/suscription/" + suscriptionId,
+             method: "PUT",
+             data: JSON.stringify(suscription),
+             contentType: "application/json",
+            dataType: "json",
+             success: function(result) {
+               if ( result.suscription ) {
+                 MessageToast.show("Changes saved", {
+                    duration: 4500,
+                    width: "35%"
+                 });
+                 that._onBindingChanged2();
+               } else {
+                 MessageToast.show("Error saving changes", {
+                    duration: 4500,
+                    width: "35%"
+                 });
+               }
+             },
+             error: function(error) {
+               MessageToast.show("Error", {
+                  duration: 4500,
+                  width: "35%"
+               });
+             }
+          });
+        },
+        _onBindingChanged2: function() {
+          var oTable2 = this.getView().byId("suscriptionTable");
+          var that = this;
+
+          $.ajax({
+            async: true,
+             url: "http://localhost:3000/suscription/",
+             method: "GET",
+             success: function(result) {
+               that.getView().getModel("data").setProperty('/suscriptions/', result.suscriptions);
+             },
+             error: function(error) {
+               console.log(error);
+             }
+          });
+
+          //Template para los elementos de la tabla de donors:
+          var oTemplate2 = new sap.m.ColumnListItem({
+            cells: [
+              new sap.m.Text({
+                text: "{data>donorId/name/}"
+              }),
+              new sap.m.Text({
+                text: "{data>donorId/lastname/}"
+              }),
+              new sap.m.Text({
+                text: "{data>amount}"
+              }),
+              new sap.m.Text({
+                text: "{data>typeCard}"
+              }),
+              new sap.m.Text({
+                text: "{data>brandCard/}"
+              }),
+              new sap.m.Text({
+                text: "{data>lastDigits/}"
+              }),
+              new sap.m.Text({
+                text: "{data>initData/}"
+              })
+            ]
+          });
+
+          //Limpiamos el binding de la tabla:
+          oTable2.unbindItems();
+
+          //Le hacemos bind a la tabla para que muestre las actividades semanales:
+          oTable2.bindItems("data>/suscriptions/", oTemplate2);
+        },
+        _deleteSuscription: function( suscription ) {
+          console.log(suscription);
+          var that = this;
+          $.ajax({
+            async: true,
+             url: "http://localhost:3000/suscription/" + suscription.suscriptionId,
+             method: "DELETE",
+             success: function(result) {
+               if ( result.suscription ) {
+                 MessageToast.show("Deleted", {
+                    duration: 4500,
+                    width: "35%"
+                 });
+                 that._onBindingChanged2();
+               } else {
+                 MessageToast.show("Not Deleted", {
+                    duration: 4500,
+                    width: "35%"
+                 });
+               }
+             },
+             error: function(error) {
+               MessageToast.show("Error", {
+                  duration: 4500,
+                  width: "35%"
+               });
+             }
+          });
+        },
+        onNewDonor: function(oEvent) {
           var dialog = sap.ui.xmlfragment("List.view.fragmento2", this);
           var that = this;
 
@@ -55,7 +210,7 @@ sap.ui.define([
           //Abrimos el dialogo:
           dialog.open();
         },
-        _saveDonor( donor ) {
+        _saveDonor: function( donor ) {
           var that = this;
           $.ajax({
             async: true,
@@ -208,7 +363,6 @@ sap.ui.define([
     			binding.filter(aFilters, "Application");
         },
         onItemPress: function(oEvent) {
-
           var donor = oEvent.getParameter("listItem").getBindingContext("data").getObject();
 
           var dialog = sap.ui.xmlfragment("List.view.fragmento", this);
@@ -259,6 +413,62 @@ sap.ui.define([
           //Abrimos el dialogo:
           dialog.open();
         },
+        onItemPress2: function(oEvent) {
+          var suscription = oEvent.getParameter("listItem").getBindingContext("data").getObject();
+          var dialog = sap.ui.xmlfragment("List.view.fragmento3", this);
+          var that = this;
+          var oModel = this.getView().getModel("data");
+
+          sap.ui.getCore().byId("name3").setValue(suscription.donorId.name);
+          sap.ui.getCore().byId("name3").setEnabled(false);
+          sap.ui.getCore().byId("lastname3").setValue(suscription.donorId.lastname);
+          sap.ui.getCore().byId("lastname3").setEnabled(false);
+          sap.ui.getCore().byId("amount").setValue(suscription.amount);
+          sap.ui.getCore().byId("initDate").setDateValue(new Date(suscription.initData));
+          sap.ui.getCore().byId("lastDigits").setValue(suscription.lastDigits);
+          sap.ui.getCore().byId("brandCard").setSelectedKey(suscription.brandCard);
+          sap.ui.getCore().byId("typeCard").setSelectedKey(suscription.typeCard);
+
+          /*Agregamos los events listeners a los botones: */
+          //Botón add:
+          sap.ui.getCore().byId("saveBtnSusc").attachPress(function() {
+            var suscriptionToSave = {
+              name: sap.ui.getCore().byId("name3").getValue(),
+              lastname: sap.ui.getCore().byId("lastname3").getValue(),
+              amount: sap.ui.getCore().byId("amount").getValue(),
+              initData  : sap.ui.getCore().byId("initDate").getDateValue(),
+              lastDigits: sap.ui.getCore().byId("lastDigits").getValue(),
+              brandCard: sap.ui.getCore().byId("brandCard").getSelectedKey(),
+              typeCard: sap.ui.getCore().byId("typeCard").getSelectedKey()
+            }
+            console.log(suscriptionToSave);
+
+            that._saveChanges2(suscriptionToSave, suscription.suscriptionId);
+
+            dialog.close();
+            dialog.destroy();
+          });
+
+          //Botón cancelar:
+          sap.ui.getCore().byId("deleteBtnSusc").attachPress(function() {
+
+            that._deleteSuscription( suscription );
+
+            dialog.close();
+            dialog.destroy();
+          });
+
+          //Al cerrar el dialogo con la tecla ESC, es necesario indicarle que se destruya:
+          dialog.attachAfterClose(function() {
+            dialog.destroy();
+          });
+
+          //Agregamos como dependiente el dialogo a la vista:
+          this.getView().addDependent(dialog);
+
+          //Abrimos el dialogo:
+          dialog.open();
+        },
         onInit: function() {
           var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 
@@ -268,6 +478,7 @@ sap.ui.define([
           var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
           var that = this;
           var oTable = this.getView().byId("donorsTable");
+          var oTable2 = this.getView().byId("suscriptionTable");
           var aux = this.getView().getModel("data").getProperty("/Logged/");
           // Filtrar si recargan la página o vienen del home:
     			/*if (typeof aux === "undefined") {
@@ -285,7 +496,20 @@ sap.ui.define([
                }
             });
 
-      			//Template para los elementos de la tabla:
+            $.ajax({
+              async: true,
+               url: "http://localhost:3000/suscription/",
+               method: "GET",
+               success: function(result) {
+                 that.getView().getModel("data").setProperty('/suscriptions/', result.suscriptions);
+                 console.log(that.getView().getModel("data"));
+               },
+               error: function(error) {
+                 console.log(error);
+               }
+            });
+
+      			//Template para los elementos de la tabla de donors:
       			var oTemplate = new sap.m.ColumnListItem({
       				cells: [
       					new sap.m.Text({
@@ -314,6 +538,39 @@ sap.ui.define([
 
       			//Le hacemos bind a la tabla para que muestre las actividades semanales:
       			oTable.bindItems("data>/donors/", oTemplate);
+
+            //Template para los elementos de la tabla de donors:
+      			var oTemplate2 = new sap.m.ColumnListItem({
+      				cells: [
+      					new sap.m.Text({
+      						text: "{data>donorId/name/}"
+      					}),
+      					new sap.m.Text({
+      						text: "{data>donorId/lastname/}"
+      					}),
+      					new sap.m.Text({
+      						text: "{data>amount}"
+      					}),
+      					new sap.m.Text({
+      						text: "{data>typeCard}"
+      					}),
+      					new sap.m.Text({
+      						text: "{data>brandCard/}"
+      					}),
+      					new sap.m.Text({
+      						text: "{data>lastDigits/}"
+      					}),
+      					new sap.m.Text({
+      						text: "{data>initData/}"
+      					})
+      				]
+      			});
+
+      			//Limpiamos el binding de la tabla:
+      			oTable2.unbindItems();
+
+      			//Le hacemos bind a la tabla para que muestre las actividades semanales:
+      			oTable2.bindItems("data>/suscriptions/", oTemplate2);
           //}
         },
         onLogout: function() {
@@ -333,6 +590,9 @@ sap.ui.define([
     		},
         onTest: function() {
           window.location.replace('http://localhost:3000/donor/orderedDonors');
+        },
+        onTest2: function() {
+          window.location.replace('http://localhost:3000/suscription/orderedSuscriptions');
         }
     });
 });
