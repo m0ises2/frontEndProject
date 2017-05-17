@@ -369,6 +369,8 @@ sap.ui.define([
                     width: "35%"
                  });
                  that._onBindingChanged();
+                 that._onBindingChanged2();
+
                } else {
                  MessageToast.show("Not Deleted", {
                     duration: 4500,
