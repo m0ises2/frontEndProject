@@ -10,31 +10,114 @@ sap.ui.define([
     "use strict";
 
     return BaseController.extend("List.controller.home", {
-        onSearch: function(oEvent) {
-          var searchString = oEvent.getSource().getValue();
-          // add filter for search
-    			var aFilters = [];
+        onNewDonor(oEvent) {
+          var dialog = sap.ui.xmlfragment("List.view.fragmento2", this);
+          var that = this;
 
-    			if (searchString && searchString.length > 0) {
-            var filter = new Filter("name", sap.ui.model.FilterOperator.Contains, searchString);    				
-    				aFilters.push(filter);
-    			}
+          /*Agregamos los events listeners a los botones: */
+          //Botón add:
+          sap.ui.getCore().byId("createBtn").attachPress(function() {
+            var donorToCreate = {
+              name: sap.ui.getCore().byId("name2").getValue(),
+              lastname: sap.ui.getCore().byId("lastname2").getValue(),
+              email: sap.ui.getCore().byId("email2").getValue(),
+              birthdate: sap.ui.getCore().byId("birthdate2").getDateValue(),
+              phone: sap.ui.getCore().byId("phone2").getValue(),
+              gender: sap.ui.getCore().byId("gender2").getSelectedKey()
+            }
 
-    			// update list binding
-    			var oTable = this.getView().byId("donorsTable");
-    			var binding = oTable.getBinding("items");
-    			binding.filter(aFilters, "Application");
-        },
-        onItemPress: function(oEvent) {
-          alert("presionado");
-          console.log(oEvent.getParameter("listItem").getBindingContext("data").getObject());
-        },
-        onInit: function() {
-          var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            if(donorToCreate.name === "" || donorToCreate.lastname === "" || donorToCreate.email === "" || donorToCreate.birthdate === "" || donorToCreate.phone === "" || donorToCreate.gender === "") {
+              MessageToast.show("Fill in the fields", {
+                 duration: 4500,
+                 width: "35%"
+              });
+            } else {
+              that._saveDonor(donorToCreate);
+              dialog.close();
+              dialog.destroy();
+            }
+          });
 
-    			oRouter.getRoute("home").attachMatched(this._onRouteMatched, this);
+          //Botón cancelar:
+          sap.ui.getCore().byId("cancelBtn").attachPress(function() {
+            dialog.close();
+            dialog.destroy();
+          });
+
+          //Al cerrar el dialogo con la tecla ESC, es necesario indicarle que se destruya:
+          dialog.attachAfterClose(function() {
+            dialog.destroy();
+          });
+
+          //Agregamos como dependiente el dialogo a la vista:
+          this.getView().addDependent(dialog);
+
+          //Abrimos el dialogo:
+          dialog.open();
         },
-        _onRouteMatched: function() {
+        _saveDonor( donor ) {
+          var that = this;
+          $.ajax({
+            async: true,
+             url: "http://localhost:3000/donor/",
+             method: "POST",
+             data: JSON.stringify(donor),
+             contentType: "application/json",
+             dataType: "json",
+             success: function(result) {
+               if ( result.donor ) {
+                 MessageToast.show("Donor Created", {
+                    duration: 4500,
+                    width: "35%"
+                 });
+                 that._onBindingChanged();
+               } else {
+                 MessageToast.show("Error creating the donor", {
+                    duration: 4500,
+                    width: "35%"
+                 });
+               }
+             },
+             error: function(error) {
+               MessageToast.show("Error", {
+                  duration: 4500,
+                  width: "35%"
+               });
+             }
+          });
+        },
+        _saveChanges( donor, donorId ) {
+          var that = this;
+          $.ajax({
+            async: true,
+             url: "http://localhost:3000/donor/" + donorId,
+             method: "PUT",
+             data: JSON.stringify(donor),
+             contentType: "application/json",
+            dataType: "json",
+             success: function(result) {
+               if ( result.donor ) {
+                 MessageToast.show("Changes saved", {
+                    duration: 4500,
+                    width: "35%"
+                 });
+                 that._onBindingChanged();
+               } else {
+                 MessageToast.show("Error saving changes", {
+                    duration: 4500,
+                    width: "35%"
+                 });
+               }
+             },
+             error: function(error) {
+               MessageToast.show("Error", {
+                  duration: 4500,
+                  width: "35%"
+               });
+             }
+          });
+        },
+        _onBindingChanged: function() {
           var that = this;
           var oTable = this.getView().byId("donorsTable");
 
@@ -44,7 +127,7 @@ sap.ui.define([
              method: "GET",
              success: function(result) {
                that.getView().getModel("data").setProperty('/donors/', result.donors);
-               console.log(that.getView().getModel("data"));
+
              },
              error: function(error) {
                console.log(error);
@@ -80,6 +163,158 @@ sap.ui.define([
 
     			//Le hacemos bind a la tabla para que muestre las actividades semanales:
     			oTable.bindItems("data>/donors/", oTemplate);
+        },
+        _deleteDonor: function( donor ) {
+          var that = this;
+          $.ajax({
+            async: true,
+             url: "http://localhost:3000/donor/" + donor.donorId,
+             method: "DELETE",
+             success: function(result) {
+               if ( result.donor ) {
+                 MessageToast.show("Deleted", {
+                    duration: 4500,
+                    width: "35%"
+                 });
+                 that._onBindingChanged();
+               } else {
+                 MessageToast.show("Not Deleted", {
+                    duration: 4500,
+                    width: "35%"
+                 });
+               }
+             },
+             error: function(error) {
+               MessageToast.show("Error", {
+                  duration: 4500,
+                  width: "35%"
+               });
+             }
+          });
+        },
+        onSearch: function(oEvent) {
+          var searchString = oEvent.getSource().getValue();
+          // add filter for search
+    			var aFilters = [];
+
+    			if (searchString && searchString.length >= 1) {
+            var filter = new Filter("name", sap.ui.model.FilterOperator.Contains, searchString);
+    				aFilters.push(filter);
+    			}
+
+    			// update list binding
+    			var oTable = this.getView().byId("donorsTable");
+    			var binding = oTable.getBinding("items");
+    			binding.filter(aFilters, "Application");
+        },
+        onItemPress: function(oEvent) {
+
+          var donor = oEvent.getParameter("listItem").getBindingContext("data").getObject();
+
+          var dialog = sap.ui.xmlfragment("List.view.fragmento", this);
+          var that = this;
+          var oModel = this.getView().getModel("data");
+
+          sap.ui.getCore().byId("name").setValue(donor.name);
+          sap.ui.getCore().byId("lastname").setValue(donor.lastname);
+          sap.ui.getCore().byId("email").setValue(donor.email);
+          sap.ui.getCore().byId("birthdate").setDateValue(new Date(donor.birthdate));
+          sap.ui.getCore().byId("phone").setValue(donor.phone);
+          sap.ui.getCore().byId("gender").setSelectedKey(donor.gender);
+
+          /*Agregamos los events listeners a los botones: */
+          //Botón add:
+          sap.ui.getCore().byId("saveBtn").attachPress(function() {
+            var donorToSave = {
+              name: sap.ui.getCore().byId("name").getValue(),
+              lastname: sap.ui.getCore().byId("lastname").getValue(),
+              email: sap.ui.getCore().byId("email").getValue(),
+              birthdate: sap.ui.getCore().byId("birthdate").getDateValue(),
+              phone: sap.ui.getCore().byId("phone").getValue(),
+              gender: sap.ui.getCore().byId("gender").getSelectedKey()
+            }
+
+            that._saveChanges(donorToSave, donor.donorId);
+            dialog.close();
+            dialog.destroy();
+          });
+
+          //Botón cancelar:
+          sap.ui.getCore().byId("deleteBtn").attachPress(function() {
+
+            that._deleteDonor( donor );
+
+            dialog.close();
+            dialog.destroy();
+          });
+
+          //Al cerrar el dialogo con la tecla ESC, es necesario indicarle que se destruya:
+          dialog.attachAfterClose(function() {
+            dialog.destroy();
+          });
+
+          //Agregamos como dependiente el dialogo a la vista:
+          this.getView().addDependent(dialog);
+
+          //Abrimos el dialogo:
+          dialog.open();
+        },
+        onInit: function() {
+          var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+
+    			oRouter.getRoute("home").attachMatched(this._onRouteMatched, this);
+        },
+        _onRouteMatched: function() {
+          var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+          var that = this;
+          var oTable = this.getView().byId("donorsTable");
+          var aux = this.getView().getModel("data").getProperty("/Logged/");
+          // Filtrar si recargan la página o vienen del home:
+    			/*if (typeof aux === "undefined") {
+    				oRouter.navTo("login", {}, false);
+    			} else {*/
+            $.ajax({
+              async: true,
+               url: "http://localhost:3000/donor/",
+               method: "GET",
+               success: function(result) {
+                 that.getView().getModel("data").setProperty('/donors/', result.donors);
+               },
+               error: function(error) {
+                 console.log(error);
+               }
+            });
+
+      			//Template para los elementos de la tabla:
+      			var oTemplate = new sap.m.ColumnListItem({
+      				cells: [
+      					new sap.m.Text({
+      						text: "{data>name/}"
+      					}),
+      					new sap.m.Text({
+      						text: "{data>lastname/}"
+      					}),
+      					new sap.m.Text({
+      						text: "{data>email}"
+      					}),
+      					new sap.m.Text({
+      						text: "{data>birthdate}"
+      					}),
+      					new sap.m.Text({
+      						text: "{data>phone/}"
+      					}),
+      					new sap.m.Text({
+      						text: "{data>gender/}"
+      					})
+      				]
+      			});
+
+      			//Limpiamos el binding de la tabla:
+      			oTable.unbindItems();
+
+      			//Le hacemos bind a la tabla para que muestre las actividades semanales:
+      			oTable.bindItems("data>/donors/", oTemplate);
+          //}
         },
         onLogout: function() {
     			var oHistory, sPreviousHash;

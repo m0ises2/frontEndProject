@@ -1,0 +1,39 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout">
+	<Dialog id="dialogoReporte" type="Standard" title="Donor">
+		<content>
+			<sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true" layout="ResponsiveGridLayout" id="__form0" labelSpanL="5" labelSpanM="3" adjustLabelSpan="false">
+			        <sap.ui.layout.form:content>
+			        	<l:VerticalLayout class="sapUiContentPadding" width="100%">
+			        	<l:content>
+			          	<Label text="Name" design="Bold" />
+			            <Input id="name" width="100%" type="Text"/>
+			            <Label text="Lastname" design="Bold" />
+			            <Input id="lastname" width="100%" type="Text" />
+                  <Label text="Email" design="Bold" />
+			            <Input id="email" width="100%" type="Email" />
+                  <Label text="Birthdate" design="Bold" />
+                  <DatePicker id="birthdate" width="auto" />
+                  <Label text="Phone" design="Bold" />
+			            <Input id="phone" width="100%" type="Number" />
+                  <Label text="Gender" design="Bold" />
+                  <Select id="gender" >
+		                 <items>
+	                        <core:ListItem text="Male" key="male" />
+	                        <core:ListItem text="Female" key="female" />
+	                     </items>
+	                </Select>
+			        	</l:content>
+			            </l:VerticalLayout>
+			        </sap.ui.layout.form:content>
+			    </sap.ui.layout.form:SimpleForm>
+		</content>
+		<beginButton>
+			<Button id="saveBtn" type="Accept" width="auto" text="Save Changes" />
+		</beginButton>
+		<endButton>
+      <Button id="deleteBtn" type="Reject" width="auto" text="Delete"/>
+
+		</endButton>
+
+	</Dialog>
+</core:FragmentDefinition>

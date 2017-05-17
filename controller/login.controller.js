@@ -9,6 +9,43 @@ sap.ui.define([
     "use strict";
 
     return BaseController.extend("List.controller.login", {
+      _onBindingChanged: function() {
+        var oTable = this.getView().byId("tableControl");
+        //Template para los elementos de la tabla:
+        var oTemplate = new sap.m.ColumnListItem({
+          cells: [
+            new sap.m.Text({
+              text: "{data>APPLICATIONAGE/}"
+            }),
+            new sap.m.Text({
+              text: "{data>SUPPLY/NAME/}"
+            }),
+            new sap.m.Text({
+              text: "{data>SUPPLY/PRESENTATION/} - {data>SUPPLY/DOSE/} {data>SUPPLY/MUNIT/}"
+            }),
+            new sap.m.Text({
+              text: "{data>SUPPLY/APPLICATIONMETHOD/}"
+            }),
+            new sap.m.Text({
+              text: "{data>APPLIEDQUANTITY/}"
+            }),
+            new sap.m.Text({
+              text: {
+                parts: [
+                  "data>APPLICATIONDATE/"
+                ],
+                formatter: formatter.formatDate
+              }
+            })
+          ]
+        });
+
+        //Limpiamos el binding de la tabla:
+        oTable.unbindItems();
+
+        //Le hacemos bind a la tabla para que muestre las actividades semanales:
+        oTable.bindItems("data>/records/", oTemplate);
+      },
         onInit: function() {
           this.getView().byId("clientId").setValue("");
           this.getView().byId("email").setValue("");
@@ -34,7 +71,6 @@ sap.ui.define([
             loginData.client = clientId;
             loginData.email = email;
             loginData.password = password;
-            console.log('Lo mando al backend: ', loginData);
 
             $.ajax({
     		       url: "http://localhost:3000/user/login",
@@ -43,11 +79,9 @@ sap.ui.define([
                contentType: "application/json",
                dataType: "json",
                data: JSON.stringify(loginData),
-    		       success: function(response) {
-                console.log(response);
+    		       success: function(response) {                
                 if(response.acceptedLogin === true) {
                   that.getView().getModel("data").setProperty('/Logged/', true);
-                  console.log(that.getView().getModel("data"));
                   that.getRouter().navTo("home", {}, false);
                 } else {
                   MessageToast.show("We don't recognize this Client ID, Email or password", {

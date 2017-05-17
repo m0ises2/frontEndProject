@@ -7,7 +7,16 @@
 						<items>
 								<IconTabFilter text="Donors" icon="sap-icon://add-contact" iconColor="Neutral" id="__filter1">
 										<content>
-												<SearchField width="25%" placeholder="Name" id="searchInput" liveChange= "onSearch"/>
+
+												<Bar id="__bar1" design="Header">
+													<contentLeft>
+															<SearchField width="auto" placeholder="Name" id="searchInput" liveChange= "onSearch"/>
+													</contentLeft>
+												<contentRight>
+														<Button text="Add Donor" width="auto" id="newDonor" type="Accept" press="onNewDonor"/>
+												</contentRight>
+											</Bar>
+
 												<Table noDataText="No Data" id="donorsTable" select="onItemPress" mode="SingleSelectMaster">
 														<items>
 																<ColumnListItem id="__item3">
@@ -54,14 +63,9 @@
 															</columns>
 														</Table>
 
-												<Button text="Excel Ordered" width="auto" id="__button0" type="Transparent" press="onTest"/>
-												<Button text="Excel Ordered" width="auto" type="Transparent" press="onTest"/>
-												<Button text="Excel Ordered" width="auto" type="Transparent" press="onTest"/>
-												<Button text="Excel Ordered" width="auto" type="Transparent" press="onTest"/>
-												<Button text="Excel Ordered" width="auto" type="Transparent" press="onTest"/>
+														<Button text="Download Excel" width="auto" id="downExcel" type="Transparent" press="onTest"/>
 
-										</content>
-
+											</content>
 								</IconTabFilter>
 
 								<IconTabFilter text="Suscriptions" icon="sap-icon://simple-payment" iconColor="Neutral" id="__filter2"/></items>
