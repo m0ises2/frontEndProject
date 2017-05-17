@@ -10,6 +10,37 @@ sap.ui.define([
     "use strict";
 
     return BaseController.extend("List.controller.home", {
+        _saveSuscription: function( suscription ) {
+          var that = this;
+          $.ajax({
+            async: true,
+             url: "http://localhost:3000/suscription/",
+             method: "POST",
+             data: JSON.stringify(suscription),
+             contentType: "application/json",
+             dataType: "json",
+             success: function(result) {
+               if ( result.suscription ) {
+                 MessageToast.show("Suscription Created", {
+                    duration: 4500,
+                    width: "35%"
+                 });
+                 that._onBindingChanged2();
+               } else {
+                 MessageToast.show("Error creating the Suscription", {
+                    duration: 4500,
+                    width: "35%"
+                 });
+               }
+             },
+             error: function(error) {
+               MessageToast.show("Error", {
+                  duration: 4500,
+                  width: "35%"
+               });
+             }
+          });
+        },
         onNewSuscription: function() {
           var dialog = sap.ui.xmlfragment("List.view.fragmento4", this);
           var that = this;
@@ -17,25 +48,31 @@ sap.ui.define([
           /*Agregamos los events listeners a los botones: */
           //Botón add:
           sap.ui.getCore().byId("createBtn2").attachPress(function() {
-            /*var donorToCreate = {
-              name: sap.ui.getCore().byId("name2").getValue(),
-              lastname: sap.ui.getCore().byId("lastname2").getValue(),
-              email: sap.ui.getCore().byId("email2").getValue(),
-              birthdate: sap.ui.getCore().byId("birthdate2").getDateValue(),
-              phone: sap.ui.getCore().byId("phone2").getValue(),
-              gender: sap.ui.getCore().byId("gender2").getSelectedKey()
+          var suscriptToCreate = {
+              donorId: sap.ui.getCore().byId("donorSelect").getSelectedKey(),
+              amount: sap.ui.getCore().byId("amount2").getValue(),
+              initData: sap.ui.getCore().byId("initDate2").getDateValue(),
+              lastDigits: sap.ui.getCore().byId("lastDigits2").getValue(),
+              brandCard: sap.ui.getCore().byId("brandCard2").getSelectedKey(),
+              typeCard: sap.ui.getCore().byId("typeCard2").getSelectedKey()
             }
 
-            if(donorToCreate.name === "" || donorToCreate.lastname === "" || donorToCreate.email === "" || donorToCreate.birthdate === "" || donorToCreate.phone === "" || donorToCreate.gender === "") {
+            console.log(suscriptToCreate);
+
+            if( suscriptToCreate.amount === "" ||
+                suscriptToCreate.initData === "" ||
+                suscriptToCreate.lastDigits === ""
+            ) {
+
               MessageToast.show("Fill in the fields", {
                  duration: 4500,
                  width: "35%"
               });
-            } else {*/
-              //that._saveDonor(donorToCreate);
+            } else {
+              that._saveSuscription(suscriptToCreate);
               dialog.close();
               dialog.destroy();
-            //}
+            }
           });
 
           //Botón cancelar:
