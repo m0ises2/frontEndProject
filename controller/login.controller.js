@@ -79,7 +79,7 @@ sap.ui.define([
                contentType: "application/json",
                dataType: "json",
                data: JSON.stringify(loginData),
-    		       success: function(response) {                
+    		       success: function(response) {
                 if(response.acceptedLogin === true) {
                   that.getView().getModel("data").setProperty('/Logged/', true);
                   that.getRouter().navTo("home", {}, false);
